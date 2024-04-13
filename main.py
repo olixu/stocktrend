@@ -6,7 +6,7 @@ from chart_utils import create_chart_options
 from datetime import datetime, timedelta
 import akshare as ak
 import pandas as pd
-import schedule
+# import schedule
 import time
 from threading import Thread
 import asyncio
