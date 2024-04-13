@@ -6,7 +6,10 @@ from chart_utils import create_chart_options
 from datetime import datetime, timedelta
 import akshare as ak
 import pandas as pd
-
+import schedule
+import time
+from threading import Thread
+import asyncio
 
 class HomePage:
     def __init__(self):
@@ -147,7 +150,8 @@ class HomePage:
         df['date'] = pd.to_datetime(df['date'])
         current_date = datetime.now()
         one_year_ago = current_date - timedelta(days=365)
-        df_filtered = df[(df['date'] >= one_year_ago) & (df['date'] <= current_date)]
+        # 这里使用.copy()来创建一个df_filtered的实际副本
+        df_filtered = df[(df['date'] >= one_year_ago) & (df['date'] <= current_date)].copy()
         df_filtered['date'] = df_filtered['date'].dt.strftime('%Y-%m-%d')
         colors = ['green' if value < 0 else 'red' for value in df_filtered['value'].tolist()]
         data_with_colors = [{'value': value, 'itemStyle': {'color': color}} for value, color in
@@ -276,16 +280,18 @@ class HomePage:
                     'font-family: "KaiTi"; font-size: 1rem; color: #333;text-align: left; line-height: 0.75')
 
     def run(self):
+        print(50*'-')
+        print("当前的时间为：", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         ui.page_title('KANPANHAO-寻找策略之美')
         self.create_header()
-        print("1")
+        print("创建完header")
         self.create_market_hotspots_grid()
-        print("2")
+        print("创建完数据图")
         self.create_footer()
-        print("3")
+        print("创建完footer")
         ui.run()
-
 
 if __name__ in {"__main__", "__mp_main__"}:
     home_page = HomePage()
     home_page.run()
+    

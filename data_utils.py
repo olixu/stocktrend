@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 import akshare as ak
-from functools import lru_cache
+from cachetools import TTLCache, cached
+# 设置缓存时间为2小时
+cache = TTLCache(maxsize=None, ttl=7200)  # maxsize=None 表示不限制缓存大小
 
 # 定义一个函数来计算开始日期
 def calculate_start_date(end_date, num_days):
@@ -8,8 +10,6 @@ def calculate_start_date(end_date, num_days):
     start_date_obj = end_date_obj - timedelta(days=num_days)
     return start_date_obj.strftime('%Y%m%d')
 
-# @lru_cache(maxsize=5120000)
-# 定义一个函数来获取涨跌幅
 def calculate_return_rates(etf_codes, end_date):
     periods = [1, 5, 10, 20, 60]
     return_rates = {f"{p}日": {} for p in periods}
@@ -38,7 +38,6 @@ def calculate_return_rates(etf_codes, end_date):
     # 删除所有值为None的键值对
     for period in return_rates.keys():
         return_rates[period] = {k: v for k, v in return_rates[period].items() if v is not None}
-    print(return_rates)
     return return_rates
 
 def format_return_rates(return_rates):
