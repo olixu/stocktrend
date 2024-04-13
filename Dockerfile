@@ -8,9 +8,10 @@ LABEL maintainer="your_email@example.com"
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# 更新apk索引，安装git和libstdc++（修复libstdc++.so.6缺失问题），以及编译相关的包
+# 更新apk索引，安装git、libstdc++（修复libstdc++.so.6缺失问题）、tzdata（包含时区数据），
+# 以及编译相关的包
 RUN apk update \
-    && apk add --no-cache git libstdc++\
+    && apk add --no-cache git libstdc++ tzdata \
     && apk add --no-cache --virtual .build-deps \
        g++ \
        gcc \
@@ -20,6 +21,9 @@ RUN apk update \
        musl-dev \
        make
 
+# 设置时区为上海（北京时间）
+ENV TZ=Asia/Shanghai
+
 # 克隆项目仓库
 RUN mkdir /app
 WORKDIR /app
@@ -27,7 +31,7 @@ RUN git clone https://github.com/olixu/stocktrend.git .
 
 # 安装Python依赖
 # requirements文件应该位于仓库的根目录
-RUN pip install --upgrade pip\
+RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 # 清理不需要的包和缓存，减小镜像体积
