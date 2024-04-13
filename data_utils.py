@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 import akshare as ak
-from cachetools import TTLCache, cached
+# from cachetools import TTLCache, cached
 # 设置缓存时间为2小时
-cache = TTLCache(maxsize=None, ttl=7200)  # maxsize=None 表示不限制缓存大小
+# cache = TTLCache(maxsize=None, ttl=7200)  # maxsize=None 表示不限制缓存大小
 
 # 定义一个函数来计算开始日期
 def calculate_start_date(end_date, num_days):
