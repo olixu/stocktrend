@@ -1,0 +1,4 @@
+nicegui 
+numpy 
+pandas 
+akshare
