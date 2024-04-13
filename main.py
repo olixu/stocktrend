@@ -58,22 +58,28 @@ class HomePage:
         index_shanghai_df = get_index_data("000001", start_date, self.end_date)
         index_shenzhen_df = get_index_data("399001", start_date, self.end_date)
 
+        self.create_index_first_row(index_shanghai_df, '上证指数')
+        self.create_index_first_row(index_shenzhen_df, '深圳成指')
         self.create_index_info_row(index_shanghai_df, '上证指数')
         self.create_index_info_row(index_shenzhen_df, '深圳成指')
 
         self.create_index_kline_chart(index_shanghai_df)
         self.create_index_kline_chart(index_shenzhen_df)
 
-    def create_index_info_row(self, df, index_name):
+    def create_index_first_row(self, df, index_name):
         latest_close_price = df.iloc[-1]['收盘']
         today_change = (latest_close_price / df.iloc[-2]['收盘'] - 1) * 100
         change_class = 'text-green-700' if today_change < 0 else 'text-red-700'
-
         with ui.row():
             ui.label(index_name).classes('text-base font-semibold')
             ui.label(f'{latest_close_price}(').classes('pl-2 text-base font-semibold')
             ui.label(f'{today_change:+.2f}%').classes(f'{change_class} text-base font-semibold')
             ui.label(')').classes('text-base font-semibold')
+        
+    def create_index_info_row(self, df, index_name):
+        latest_close_price = df.iloc[-1]['收盘']
+        today_change = (latest_close_price / df.iloc[-2]['收盘'] - 1) * 100
+        change_class = 'text-green-700' if today_change < 0 else 'text-red-700'
 
         changes = {}
         for days in [5, 10, 20, 60, 120]:
@@ -175,7 +181,7 @@ class HomePage:
                 'type': 'bar'
             }]
         }
-        ui.echart(options=options).style('margin-top: -20px;').classes('col-span-2')
+        ui.echart(options=options).style('margin-top: -20px;').classes('col-span-2').style('height: 400px')
 
     def create_industry_etf_section(self):
         ui.label('行业ETF涨幅').classes('col-span-2 text-base font-semibold border-b-2 border-sky-700 pb-1')
