@@ -20,8 +20,8 @@ WORKDIR /app
 # 克隆项目仓库
 RUN git clone https://github.com/olixu/stocktrend.git .
 
-# 复制requirements.txt到工作目录
-COPY requirements.txt .
+# 复制整个项目到工作目录
+COPY . /app
 
 # 安装Python依赖
 RUN pip install --upgrade pip \
