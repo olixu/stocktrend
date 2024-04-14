@@ -1,4 +1,4 @@
 nicegui 
 numpy 
 pandas 
-akshare
+akshare==1.12.73
