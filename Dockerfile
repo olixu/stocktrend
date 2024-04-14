@@ -12,17 +12,25 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git libxslt-dev libffi-dev libssl-dev make cmake \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && dpkg-reconfigure -f noninteractive tzdata \
-    && pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt \
-    # 清理不再需要的包和缓存
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && dpkg-reconfigure -f noninteractive tzdata
+
+# 设置工作目录
+WORKDIR /app
 
 # 克隆项目仓库
-WORKDIR /app
 RUN git clone https://github.com/olixu/stocktrend.git .
+
+# 复制requirements.txt到工作目录
+COPY requirements.txt .
+
+# 安装Python依赖
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+# 清理不再需要的包和缓存
+RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # 暴露端口（假设你的应用使用的是8080端口）
 EXPOSE 8080
