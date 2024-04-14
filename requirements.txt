@@ -1,4 +1,5 @@
 nicegui 
 numpy 
 pandas 
+pyarrow
 akshare==1.12.73
