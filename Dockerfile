@@ -10,8 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 # 使用apt安装必要的依赖，然后清理缓存以减小镜像大小
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends git \
-    && apt-get install -y --no-install-recommends g++ gcc libxslt-dev libffi-dev openssl-dev make cmake \
+    && apt-get install -y --no-install-recommends git libxslt-dev libffi-dev libssl-dev make cmake \
     && echo "Asia/Shanghai" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata \
     && pip install --upgrade pip \
@@ -22,7 +21,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # 克隆项目仓库
-RUN mkdir /app
 WORKDIR /app
 RUN git clone https://github.com/olixu/stocktrend.git .
 
