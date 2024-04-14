@@ -19,7 +19,8 @@ RUN apk update \
        libffi-dev \
        openssl-dev \
        musl-dev \
-       make
+       make \
+       cmake
 
 # 设置时区为上海（北京时间）
 ENV TZ=Asia/Shanghai
